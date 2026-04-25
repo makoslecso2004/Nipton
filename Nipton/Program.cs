@@ -17,7 +17,7 @@ namespace Nipton
             builder.Services.AddOpenApi();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer("Server=localhost;Database=CourseManagerDB_A8VIKC;Trusted_Connection=True;TrustServerCertificate=True;"));
+                options.UseSqlServer("Server=(local);Database=CourseManagerDB_A8VIKC;Trusted_Connection=True;TrustServerCertificate=True;"));
 
             builder.Services.AddSwaggerGen(c =>
             {
