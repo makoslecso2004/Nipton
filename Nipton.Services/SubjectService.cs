@@ -95,13 +95,28 @@ namespace Nipton.Services
 
             var courses = await _context.Courses
                 .Include(c => c.Students)
-                .Where(c => dto.CourseIds.Contains(c.Id) && c.SubjectId == subjectId)
+                .Where(c => c.SubjectId == subjectId)
                 .ToListAsync();
 
-            if (courses.Count != dto.CourseIds.Count) throw new Exception("Néhány kurzus nem létezik, vagy nem ehhez a tárgyhoz tartozik!");
+            if (!courses.Any()) throw new Exception("Nincsenek elérhető kurzusok ehhez a tárgyhoz!");
+
+            // Az összes kurzustípus azonosítása
+            var requiredCourseTypes = courses.Select(c => c.Type).Distinct().ToList();
+
+            // Ellenőrizzük, hogy minden szükséges kurzustípusra jelentkezett-e
+            var selectedCourses = courses.Where(c => dto.CourseIds.Contains(c.Id)).ToList();
+            var selectedCourseTypes = selectedCourses.Select(c => c.Type).Distinct().ToList();
+
+            foreach (var requiredType in requiredCourseTypes)
+            {
+                if (!selectedCourseTypes.Contains(requiredType))
+                {
+                    throw new Exception($"A(z) {requiredType} típusú kurzusra is jelentkezni kell!");
+                }
+            }
 
             // Validációk a specifikáció alapján
-            foreach (var course in courses)
+            foreach (var course in selectedCourses)
             {
                 if (course.Students.Count >= course.MaxStudents)
                     throw new Exception($"A(z) {course.CourseCode} kurzus megtelt!");

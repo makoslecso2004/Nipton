@@ -6,6 +6,7 @@ using Nipton.DataContext.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Nipton.Services
 {
@@ -41,6 +42,15 @@ namespace Nipton.Services
 
             var logs = await query.OrderByDescending(n => n.SentAt).ToListAsync();
             return _mapper.Map<List<NotificationLogDto>>(logs);
+        }
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddNotificationBackgroundService(this IServiceCollection services)
+        {
+            services.AddHostedService<NotificationBackgroundService>();
+            return services;
         }
     }
 }
