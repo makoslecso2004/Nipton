@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Nipton.DataContext.Dtos;
 using Nipton.DataContext.Entities;
+using System.Linq;
 
 namespace Nipton.Services
 {
@@ -13,9 +14,15 @@ namespace Nipton.Services
             CreateMap<UserUpdateDto, User>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<Subject, SubjectDto>().ReverseMap();
-            CreateMap<SubjectCreateDto, Subject>();
+            CreateMap<Subject, SubjectDto>()
+                .ForMember(dest => dest.PrerequisiteIds, opt => opt.MapFrom(src => src.Prerequisites != null ? src.Prerequisites.Select(p => p.PrerequisiteSubjectId).ToList() : new System.Collections.Generic.List<int>()))
+                .ReverseMap();
+
+            CreateMap<SubjectCreateDto, Subject>()
+                .ForMember(dest => dest.Prerequisites, opt => opt.Ignore());
+
             CreateMap<SubjectUpdateDto, Subject>()
+                .ForMember(dest => dest.Prerequisites, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Course, CourseDto>()

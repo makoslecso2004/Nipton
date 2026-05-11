@@ -11,6 +11,8 @@ namespace Nipton.DataContext.Dtos
         public string Name { get; set; }
         public int Credits { get; set; }
         public bool IsActive { get; set; }
+
+        public List<int> PrerequisiteIds { get; set; }
     }
 
     public class SubjectCreateDto
@@ -18,6 +20,8 @@ namespace Nipton.DataContext.Dtos
         public string Code { get; set; }
         public string Name { get; set; }
         public int Credits { get; set; }
+
+        public List<int> PrerequisiteIds { get; set; }
     }
 
     public class SubjectUpdateDto
@@ -25,5 +29,18 @@ namespace Nipton.DataContext.Dtos
         public string Code { get; set; }
         public string Name { get; set; }
         public int Credits { get; set; }
+
+        public List<int> PrerequisiteIds { get; set; }
+    }
+
+    public class PrerequisiteAddDto
+    {
+        public int PrerequisiteId { get; set; }
+    }
+
+    public class PrerequisiteRemoveDto
+    {
+        public int? PrerequisiteId { get; set; }
+        public string PrerequisiteCode { get; set; }
     }
 }

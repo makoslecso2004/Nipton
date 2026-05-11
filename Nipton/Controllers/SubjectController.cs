@@ -140,5 +140,48 @@ namespace Nipton.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("{subjectId}")]
+        public async Task<ActionResult> AddPrerequisite(int subjectId, PrerequisiteAddDto dto)
+        {
+            try
+            {
+                await _subjectService.AddPrerequisiteAsync(subjectId, dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{subjectId}")]
+        public async Task<ActionResult> RemovePrerequisite(int subjectId, [FromBody] PrerequisiteRemoveDto dto)
+        {
+            try
+            {
+                await _subjectService.RemovePrerequisiteAsync(subjectId, dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("{subjectId}")]
+        public async Task<ActionResult<List<SubjectDto>>> GetPrerequisites(int subjectId)
+        {
+            try
+            {
+                var result = await _subjectService.GetPrerequisitesAsync(subjectId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

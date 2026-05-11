@@ -50,6 +50,7 @@ namespace Nipton.DataContext.Dtos
     {
         public int StudentId { get; set; }
         public List<int> CourseIds { get; set; }
+        public string Semester { get; set; }
     }
 
     public class CourseUnregisterDto

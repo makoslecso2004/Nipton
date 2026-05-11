@@ -19,6 +19,7 @@ namespace Nipton.DataContext.Context
         public DbSet<CourseStudent> CourseStudents { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<NotificationLog> NotificationLogs { get; set; }
+        public DbSet<SubjectPrerequisite> SubjectPrerequisites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,6 +88,22 @@ namespace Nipton.DataContext.Context
                 .WithMany()
                 .HasForeignKey(n => n.CourseId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // 7. Tantárgy előfeltételek (self-referencing many-to-many)
+            modelBuilder.Entity<SubjectPrerequisite>()
+                .HasKey(sp => new { sp.SubjectId, sp.PrerequisiteSubjectId });
+
+            modelBuilder.Entity<SubjectPrerequisite>()
+                .HasOne(sp => sp.Subject)
+                .WithMany(s => s.Prerequisites)
+                .HasForeignKey(sp => sp.SubjectId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SubjectPrerequisite>()
+                .HasOne(sp => sp.PrerequisiteSubject)
+                .WithMany(s => s.IsPrerequisiteFor)
+                .HasForeignKey(sp => sp.PrerequisiteSubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

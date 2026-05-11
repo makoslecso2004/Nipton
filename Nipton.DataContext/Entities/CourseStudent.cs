@@ -11,5 +11,8 @@ namespace Nipton.DataContext.Entities
 
         public int StudentId { get; set; }
         public User Student { get; set; }
+
+        // Indicates whether the student passed the course (used for prerequisites)
+        public bool Passed { get; set; }
     }
 }

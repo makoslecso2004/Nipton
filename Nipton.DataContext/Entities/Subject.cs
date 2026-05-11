@@ -13,5 +13,9 @@ namespace Nipton.DataContext.Entities
         public bool IsActive { get; set; } = true;
 
         public ICollection<Course> Courses { get; set; }
+
+        // Előfeltételek (self-referencing many-to-many through SubjectPrerequisite)
+        public ICollection<SubjectPrerequisite> Prerequisites { get; set; }
+        public ICollection<SubjectPrerequisite> IsPrerequisiteFor { get; set; }
     }
 }
